@@ -1,0 +1,58 @@
+#!/bin/bash
+
+die() {
+    errstr="$*"
+    echo "${errstr}"
+    exit 1
+}
+
+if [ -r "bash_profile" -a -r "install_profile" ]
+then
+	INSTD=${PWD}
+else
+	die "Can't locate install files. Failed."
+fi
+
+echo "moving old text files out of the way..."
+
+for rcfile in inputrc bashrc profile aliases login
+do
+    if [ -e "${HOME}/.${rcfile}" -a ! -h "${HOME}/.${rcfile}" ]
+    then
+        mv -vn "${HOME}/.${rcfile}" "${HOME}/.${rcfile}_local" || die "can't move existing ${HOME}/.${rcfile} to ${HOME}/.${rcfile}_local"
+    fi
+done
+
+for rcfile in bashrc profile aliases login
+do
+    if [ -e "${HOME}/.bash_${rcfile}" -a ! -h "${HOME}/.bash_${rcfile}" ]
+    then
+        mv "${HOME}/.bash_${rcfile}" "${HOME}/.bash_${rcfile}_local" || die "can't move existing ${HOME}/.bash_${rcfile} to ${HOME}/.bash_${rcfile}_local"
+    fi
+done
+
+echo "Installing..."
+
+for rcfile in bashrc profile login
+do
+    ln -s ${INSTD}/bash_profile ${HOME}/.${rcfile}
+    ln -s ${INSTD}/bash_profile ${HOME}/.bash_${rcfile}
+done
+ln -s ${INSTD}/bash_aliases ${HOME}/.bash_aliases
+ln -s ${INSTD}/bash_inputrc ${HOME}/.inputrc
+
+if [ ! -d "${HOME}/.history" ]
+then
+	mkdir "${HOME}/.history"
+fi
+
+echo "Finished:"
+# Show what has been done:
+for rcfile in inputrc bashrc profile aliases login
+do
+    [[ -r "${HOME}/.${rcfile}" ]] && ls -alF "${HOME}/.${rcfile}"
+    [[ -r "${HOME}/.bash_${rcfile}" ]] && ls -alF "${HOME}/.bash_${rcfile}"
+    [[ -r "${HOME}/.${rcfile}_local" ]] && ls -alF "${HOME}/.bash_${rcfile}"
+    [[ -r "${HOME}/.bash_${rcfile}_local" ]] && ls -alF "${HOME}/.bash_${rcfile}_local"
+done
+

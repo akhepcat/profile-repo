@@ -1,0 +1,19 @@
+# user inputrc stops the system inputrc, so include it first
+$include /etc/inputrc
+
+# filter out improper escaping from web pastes:
+set enable-bracketed-paste on
+set bell-style none
+
+# tweaking
+"\C-p":history-search-backward
+"\C-n":history-search-forward
+
+set colored-stats On
+# this gets weird....
+#set completion-ignore-case On
+set completion-prefix-display-length 3
+set mark-symlinked-directories On
+set show-all-if-ambiguous On
+set show-all-if-unmodified On
+set visible-stats On
