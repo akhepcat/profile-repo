@@ -3,6 +3,7 @@ Clean-room profile management building blocks
 
 
 The three main files are broken into:
+
 	* bash_inputrc
 	* bash_profile
 	* bash_aliases
@@ -19,4 +20,4 @@ Once installed, things will look like this:
 	lrwxrwxrwx   1 user user          32 Mar 18 09:40 .inputrc -> src/profile-repo/bash_inputrc
 
 
-existing versions are moved to  _local  variations, or the script dies when it can't resolve conflict issues
+existing versions are moved to  \_local  variations, or the script dies when it can't resolve conflict issues
