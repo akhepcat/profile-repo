@@ -42,9 +42,9 @@ if [ -n "$PS1" ]; then
 	LC_COLLATE=C
 
 	# if the \$FOO  bug bites, just uncomment this...
-	if ((${BASH_VERSINFO[0]} >= 4)) && ((${BASH_VERSINFO[1]} >= 2))
-		then shopt -s direxpand
-	fi
+        if [ ${BASH_VERSINFO[0]} -ge 5 -o \( ${BASH_VERSINFO[0]} -eq 4 -a ${BASH_VERSINFO[1]} -ge 2 -a ${BASH_VERSINFO[2]} -ge 29 \) ]
+                then shopt -s direxpand
+        fi
 	shopt -s checkwinsize
 
 	if [ -n "${BASH}" -a -n "${BASH##*termux*}" ]
