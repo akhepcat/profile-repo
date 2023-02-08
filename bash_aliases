@@ -59,5 +59,7 @@ alias tsftp='sftp -o StrictHostKeyChecking=false -o UserKnownHostsFile=/dev/null
 alias tssh='ssh -o StrictHostKeyChecking=false -o UserKnownHostsFile=/dev/null -E /dev/null -k -x'
 # force password authentication
 alias pssh='ssh -o PreferredAuthentications=keyboard-interactive,password'
+# for old ssh connections
+alias ossh='ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 -oHostKeyAlgorithms=+ssh-rsa -ociphers=+aes256-cbc,aes192-cbc,aes128-cbc'
 
 export BASHALIASES
