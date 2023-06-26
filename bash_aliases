@@ -27,7 +27,7 @@ alias ipgrep='egrep -o '\''[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'\'''
 alias ip6r='ip -6 route | grep -v "^f"'
 alias fixterm=' echo -e "\017" '
 alias nulcat="sed 's/\x00/\n/g'"
-alias wt='which biff && biff y; while true; do echo -n "."; sleep 1s; done'
+alias wt='which biff >/dev/null 2>&1 && biff y; while true; do echo -n "."; sleep 1s; done'
 alias cls=clear
 
 # Add an "alert" alias for long running commands.  Use like so:
