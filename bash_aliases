@@ -63,4 +63,7 @@ alias pssh='ssh -o PreferredAuthentications=keyboard-interactive,password'
 # for old ssh connections
 alias ossh='ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 -oHostKeyAlgorithms=+ssh-rsa -ociphers=+aes256-cbc,aes192-cbc,aes128-cbc'
 
+#Friggin mount gets busy, so just show the local /dev/ices
+alias lmount='mount | grep "^/dev/"'
+
 export BASHALIASES
