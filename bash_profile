@@ -82,7 +82,7 @@ if [ -n "$PS1" ]; then
 
 	if [ -n "${BASH}" -a -n "${BASH##*termux*}" ]
 	then
-		MYPATH=/usr/local/bin:/usr/lib/openoffice:/share/bin:${PATH}:/bin:/sbin:/etc:/usr/etc:/usr/sbin:/usr/openwin/bin:/usr/ucb:/usr/ccs/bin:/apps/local/bin:/etc/sudocmd:/usr/sbin:/sbin:/usr/local/sbin:/opt/cxoffice/bin:${HOME}/.cargo/bin
+		MYPATH=/usr/local/bin:/usr/lib/openoffice:/share/bin:${PATH}:/bin:/sbin:/etc:/usr/etc:/usr/sbin:/usr/openwin/bin:/usr/ucb:/usr/ccs/bin:/apps/local/bin:/etc/sudocmd:/usr/sbin:/sbin:/usr/local/sbin:/opt/cxoffice/bin:${HOME}/.cargo/bin:${HOME}/go/bin/:${HOME}/.local/bin
 		TPATH=$HOME/bin:$(for i in `echo $MYPATH | sed 's/:/ /g'`; do if [ -e $i ]; then echo $i; fi; done | sort -u | tr '\n' ':')
 		PATH=${TPATH}
 
@@ -94,6 +94,8 @@ if [ -n "$PS1" ]; then
 	else
 		PATH=${HOME}/bin:${PATH}
 	fi
+
+	PATH=${PATH/%:/}
 
 	export USERNAME ENV PATH LD_LIBRARY_PATH PROMPT_COMMAND \
 		PS1 EDITOR PAGER TERM ignoreeof MANPATH CLASSPATH \
