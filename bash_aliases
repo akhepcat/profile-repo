@@ -24,7 +24,7 @@ fi
 
 alias psx="ps -ef | grep -v '\[.*\]'"
 alias ipgrep='egrep -o '\''[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'\'''
-alias confgrep='grep -vE \'^[[:space:]]*(#.*)?$\''
+alias confgrep="grep -vE '^[[:space:]]*(#.*)?$'"
 alias ip6r='ip -6 route | grep -v "^f"'
 alias fixterm=' echo -e "\017" '
 alias nulcat="sed 's/\x00/\n/g'"
