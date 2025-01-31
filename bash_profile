@@ -97,9 +97,13 @@ if [ -n "$PS1" ]; then
 
 	PATH=${PATH/%:/}
 
+	SYSTEMD_PAGER="less"
+	SYSTEMD_LESS="FRXMK"
+
 	export USERNAME ENV PATH LD_LIBRARY_PATH PROMPT_COMMAND \
 		PS1 EDITOR PAGER TERM ignoreeof MANPATH CLASSPATH \
-		HISTFILE HISTCONTROL command_oriented_history LC_COLLATE
+		HISTFILE HISTCONTROL command_oriented_history LC_COLLATE \
+		SYSTEMD_PAGER SYSTEMD_LESS
 
 	##  cgroups  tty grouping for better CPU performance feel
 	if [ -d /dev/cgroup/cpu/user ];
