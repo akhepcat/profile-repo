@@ -34,9 +34,28 @@ if [ -n "$PS1" ]; then
 	command_oriented_history=1
 	ignoreeof=10
 
-	[ -n "$(which less 2>/dev/null)" ] && PAGER="$(which less) -ri" || PAGER="$(which more)"
-	# make less more friendly for non-text input files, see lesspipe(1)
-	[ -n "$(which lesspipe 2>/dev/null)" ] && eval "$(lesspipe)"
+	EDITOR="$(command -v joe || command -v vi)"
+
+	if [ -n "$(command -v less)" ]
+	then
+		LESS="-EFXRfi"
+		PAGER="$(command -v less) ${LESS}"
+		# make less more friendly for non-text input files, see pygmentize(1) and  lesspipe(1)
+		if [ -n "$(command -v pygmentize)" ]
+		then
+			LESSOPEN="|pygmentize -g %s"
+			export LESSOPEN
+		elif [ -n "$(command -v lesspipe)" ]
+		then
+			eval "$(lesspipe)"
+		fi
+		SYSTEMD_PAGER="$(command -v less)"
+		SYSTEMD_LESS="${LESS}"
+		export SYSTEMD_PAGER SYSTEMD_LESS
+	else
+		MORE="-e"
+		PAGER="$(command -v more) ${MORE}"
+	fi
 
 	# Proper sorting! Woo!
 	LC_COLLATE=C
@@ -97,13 +116,10 @@ if [ -n "$PS1" ]; then
 
 	PATH=${PATH/%:/}
 
-	SYSTEMD_PAGER="less"
-	SYSTEMD_LESS="FRXMK"
 
 	export USERNAME ENV PATH LD_LIBRARY_PATH PROMPT_COMMAND \
-		PS1 EDITOR PAGER TERM ignoreeof MANPATH CLASSPATH \
-		HISTFILE HISTCONTROL command_oriented_history LC_COLLATE \
-		SYSTEMD_PAGER SYSTEMD_LESS
+		PS1 EDITOR MORE LESS PAGER TERM ignoreeof MANPATH CLASSPATH \
+		HISTFILE HISTCONTROL command_oriented_history LC_COLLATE
 
 	##  cgroups  tty grouping for better CPU performance feel
 	if [ -d /dev/cgroup/cpu/user ];
