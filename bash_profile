@@ -114,7 +114,11 @@ if [ -n "$PS1" ]; then
 		PATH=${HOME}/bin:${PATH}
 	fi
 
+	unset MYPATH
+
+	# remove any trailing ':'
 	PATH=${PATH/%:/}
+	LD_LIBRARY_PATH=${LD_LIBRARY_PATH/%:/}
 
 
 	export USERNAME ENV PATH LD_LIBRARY_PATH PROMPT_COMMAND \
