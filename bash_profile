@@ -142,7 +142,7 @@ if [ -n "$PS1" ]; then
 	if [ -n "${BASH}" -a -n "${BASH##*termux*}" ]
 	then
 		test -x ${HOME}/bin/fix-screens && ${HOME}/bin/fix-screens
-		mesg n || true
+		test -x $(command -v mesg) && mesg n
 	fi
 
 	export BASHPROFILE
