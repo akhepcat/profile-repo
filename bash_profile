@@ -122,11 +122,6 @@ if [ -n "$PS1" ]; then
 
 	if [ -n "${BASH}" -a -n "${BASH##*termux*}" ]
 	then
-		local MYPATH
-		local MYLDLIBPATH
-		local TCLASSPATH
-		local MYMANPATH
-	
 		MYPATH=/usr/local/bin:/usr/lib/openoffice:/share/bin:${PATH}:/bin:/sbin:/etc:/usr/etc:/usr/sbin:/usr/openwin/bin:/usr/ucb:/usr/ccs/bin:/apps/local/bin:/etc/sudocmd:/usr/sbin:/sbin:/usr/local/sbin:/opt/cxoffice/bin:${HOME}/.cargo/bin:${HOME}/go/bin/:${HOME}/.local/bin
 		path_add PATH "${MYPATH}"
 
@@ -142,6 +137,11 @@ if [ -n "$PS1" ]; then
 	else
 		PATH=${HOME}/bin:${PATH}
 	fi
+
+	unset MYPATH
+	unset MYLDLIBPATH
+	unset TCLASSPATH
+	unset MYMANPATH
 
 	# remove any trailing ':'
 	PATH=${PATH/%:/}
