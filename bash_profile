@@ -1,3 +1,6 @@
+# First, just return if we're not interactive
+[[ $- != *i* ]] && return
+
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
@@ -7,10 +10,35 @@ if [ -f /etc/bash_completion ]; then
 	. /etc/bash_completion
 fi
 
+# Validate and append directories to a PATH
+path_add() {
+	local myvar=$1
+	local paths=$2
+	local IFS=':'
+	local temp_path=""
+
+	for dir in $paths
+	do
+		if [[ -d "$dir" ]]
+		then
+			if [[ -z "$temp_path" ]]
+			then
+				temp_path="$dir"
+			elif [[ ":$temp_path:" != *":$dir:"* ]]
+			then
+				temp_path="$temp_path:$dir"
+			fi
+		fi
+	done
+	printf -v "$myvar" "%s" "$temp_path"
+}
+
+
 # Non-interactive login session
 TS=$(date +"%Y%m%d%H%S")
 HOST=$(uname -n)
 USERNAME=$(whoami)
+USER=${USER:-$USERNAME}
 
 if [ -n "$PS1" ]; then
 	test -n "${BASHPROFILE}" && return
@@ -92,33 +120,34 @@ if [ -n "$PS1" ]; then
 		    ;;
 	esac
 
-	# fixup these paths:
-	CLASSPATH=${HOME}/.java/jar:$CLASSPATH
-
-	MYMANPATH=/usr/man:/usr/share/man:/usr/local/man:$MANPATH
-	MANPATH=$(for i in `echo $MYMANPATH | sed 's/:/ /g'`; do if [ -e $i ]; then echo $i; fi; done | sort -u | tr [\\n] [:])
-	unset MYMANPATH MYPATH
-
 	if [ -n "${BASH}" -a -n "${BASH##*termux*}" ]
 	then
+		local MYPATH
+		local MYLDLIBPATH
+		local TCLASSPATH
+		local MYMANPATH
+	
 		MYPATH=/usr/local/bin:/usr/lib/openoffice:/share/bin:${PATH}:/bin:/sbin:/etc:/usr/etc:/usr/sbin:/usr/openwin/bin:/usr/ucb:/usr/ccs/bin:/apps/local/bin:/etc/sudocmd:/usr/sbin:/sbin:/usr/local/sbin:/opt/cxoffice/bin:${HOME}/.cargo/bin:${HOME}/go/bin/:${HOME}/.local/bin
-		TPATH=$HOME/bin:$(for i in `echo $MYPATH | sed 's/:/ /g'`; do if [ -e $i ]; then echo $i; fi; done | sort -u | tr '\n' ':')
-		PATH=${TPATH}
+		path_add PATH "${MYPATH}"
 
 		MYLDLIBPATH=$LD_LIBRARY_PATH:/usr/local/lib:/share/lib:/opt/kde3/lib:/opt/qt3/lib
-		TLD_LIBRARY_PATH=$(for i in `echo $MYLDLIBPATH | sed 's/:/ /g'`; do if [ -e $i ]; then echo $i; fi; done | sort -u | tr '\n' ':')
-		LD_LIBRARY_PATH=${TLD_LIBRARY_PATH}
+		path_add LD_LIBRARY_PATH "${MYLDLIBPATH}"
 	
-		unset MYLDLIBPATH TPATH TLD_LIBRARY_PATH
+		TCLASSPATH=${HOME}/.java/jar:$CLASSPATH
+		path_add CLASSPATH "${TCLASSPATH}"
+
+		MYMANPATH=/usr/man:/usr/share/man:/usr/local/man:$MANPATH
+		path_add MANPATH "${MYMANPATH}"
+
 	else
 		PATH=${HOME}/bin:${PATH}
 	fi
 
-	unset MYPATH
-
 	# remove any trailing ':'
 	PATH=${PATH/%:/}
 	LD_LIBRARY_PATH=${LD_LIBRARY_PATH/%:/}
+	CLASSPATH=${CLASSPATH/%:/}
+	MANPATH=${MANPATH/%:/}
 
 
 	export USERNAME ENV PATH LD_LIBRARY_PATH PROMPT_COMMAND \
@@ -153,4 +182,10 @@ fi
 if [ -f ${HOME}/.profile_local ]; then
 # Put local variable defines in here
 	. ${HOME}/.profile_local
+fi
+
+# support RUST
+if [ -f "$HOME/.cargo/env" ] 
+then
+	. "$HOME/.cargo/env"
 fi
